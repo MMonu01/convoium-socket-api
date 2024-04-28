@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const { userModel } = require("./model/user-model.js");
 const { messageModel } = require("./model/message-model.js");
+const { joinRoomModel } = require("./model/room-model.js");
 
 let user_list = {};
 
@@ -22,6 +23,8 @@ function ImplimentSocketIo(io) {
       const user_email = user_details.email;
       const user_avatar = user_details.avatar;
       const username = user_details.username;
+
+      await joinRoomModel.updateMany({ room_id }, { preview: new_message, date: new Date() });
 
       const newMessage = new messageModel({ message: new_message, room_id, user_email, user_avatar, username });
       await newMessage.save();
